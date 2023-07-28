@@ -1,7 +1,9 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable import/no-extraneous-dependencies */
 /**
  * Module dependencies.
  */
+const path = require('path');
 const express = require('express');
 const compression = require('compression');
 const session = require('express-session');
@@ -12,10 +14,8 @@ const lusca = require('lusca');
 const dotenv = require('dotenv');
 const MongoStore = require('connect-mongo');
 const flash = require('express-flash');
-const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
-
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
@@ -28,6 +28,8 @@ dotenv.config({ path: '.env' });
 const userController = require('./controllers/user');
 const contactController = require('./controllers/contact');
 const homeController = require('./controllers/home');
+const eventController = require('./controllers/event');
+const attendanceController = require('./controllers/attendance');
 
 /**
  * API keys and Passport configuration.
@@ -132,6 +134,21 @@ app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
 app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
+/**
+ * event routes.
+ */
+app.get('/create-event', passportConfig.isAuthenticated, eventController.getCreateEvent);
+app.post('/create-event', passportConfig.isAuthenticated, eventController.createEvent);
+app.get('/events', passportConfig.isAuthenticated, eventController.getEvents);
+app.get('/events/:id', passportConfig.isAuthenticated, eventController.generateQRCode, attendanceController.getAttendance, eventController.getEvent);
+app.get('/events/:id/edit', passportConfig.isAuthenticated, eventController.getEditEvent);
+app.post('/events/:id/edit', passportConfig.isAuthenticated, eventController.editEvent);
+app.post('/events/:id/delete', passportConfig.isAuthenticated, eventController.deleteEvent);
+/**
+ * attendance routes.
+ */
+app.get('/events/:id/add-attendance', passportConfig.isAuthenticated, attendanceController.addAttendance);
+app.get('/events/:id/add-attendance/:uid', attendanceController.addAttendanceMobile);
 
 /**
  * Error Handler.

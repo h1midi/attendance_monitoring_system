@@ -1,6 +1,5 @@
 /* eslint-disable linebreak-style */
 const passport = require('passport');
-const refresh = require('passport-oauth2-refresh');
 const { Strategy: LocalStrategy } = require('passport-local');
 const moment = require('moment');
 const User = require('../models/User');
