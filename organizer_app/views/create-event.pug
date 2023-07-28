@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  head
+    title #{title}
+  body
+    h1 Create Event
+    form(action='/create-event', method='POST')
+      input(type='hidden', name='_csrf', value=_csrf)
+      label(for='eventName') Event Name:
+      input(type='text', name='eventName', required)
+      br
+      label(for='date') Date:
+      input(type='date', name='date', required)
+      br
+      label(for='location') Location:
+      input(type='text', name='location', required)
+      br
+      input(type='submit', value='Create Event')
+    a(href='/events') Cancel

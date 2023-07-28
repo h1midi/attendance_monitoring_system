@@ -1,0 +1,102 @@
+extends layout
+
+block content
+  head
+    title #{title}
+    style.
+      h1 {
+        color: #333;
+        margin: 20px;
+      }
+      h2 {
+        color: #007bff;
+        margin: 10px;
+      }
+      p {
+        color: #555;
+        margin: 10px;
+      }
+      .p {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 10px;
+        border: 1px solid #007bff;
+        padding: 8px 12px;
+        border-radius: 5px;
+      }
+      .w {
+        color: #fad02c;
+        text-decoration: none;
+        margin-right: 10px;
+        border: 1px solid #fad02c;
+        padding: 8px 12px;
+        border-radius: 5px;
+      }
+      .p:hover {
+        background-color: #007bff;
+        color: #fff;
+      }
+      .w:hover {
+        background-color: #fad02c;
+        color: #fff;
+      }
+      form {
+        display: inline-block;
+        margin-top: 20px;
+      }
+      input[type="submit"] {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      input[type="submit"]:hover {
+        background-color: #c82333;
+      }
+      .at {
+        color: #333;
+        border-bottom: 2px solid #333;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        margin-top: 16px;
+      }
+      .atul {
+        list-style-type: disc;
+        margin-left: 20px;
+      }
+      .atil {
+        color: #777;
+        margin-bottom: 5px;
+      }
+  .row
+    .col
+      h1 Event Details
+      h2 #{event.name}
+      p Date: #{event.date}
+      p Location: #{event.location}
+      a.p(href='/events') Back to Events
+      a.w(href='/events/#{event._id}/edit') Edit Event
+      form(action=`/events/${event._id}/delete`, method='POST')
+        input(type='submit', value='Delete Event')
+    .col.text-center
+      img(src=`${qrCode}`, alt='QR Code')
+      p Scan the QR code to check in to this event.
+
+  h2 Attendees
+  if attendance.length > 0
+    table
+      thead
+        tr
+          th Date
+          th Student Name
+          th Status
+      tbody
+        each entry in attendance
+          tr
+            td= entry.user.profile.name
+            td= entry.email
+            td= entry.timestamp.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: 'numeric'})
+  else
+    p No attendees yet.

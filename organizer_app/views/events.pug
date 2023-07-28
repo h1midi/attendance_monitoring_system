@@ -1,0 +1,77 @@
+extends layout
+
+block content
+  head
+    title #{title}
+  style.
+    h1 {
+      color: #3366cc;
+      align-self: start;
+      margin-left: 20%;
+    }
+
+    .event-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .events {
+      list-style: none;
+      padding: 0;
+      width: 60%;
+    }
+
+    .event-item {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    .event-item:hover {
+      background-color: #fafafa;
+    }
+
+    .event-link {
+      text-decoration: none;
+      color: #006600;
+    }
+
+    .event-date {
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    .create-event-btn {
+      display: inline-block;
+      background-color: #3366cc;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+      align-self: flex-start;
+      margin-left: 20%;
+    }
+
+    .create-event-btn:hover {
+      background-color: #003366;
+    }
+
+    .no-events {
+      color: #999;
+    }
+  .event-page
+    h1 Events
+    if events.length > 0
+      ul.events
+        each event in events
+          li.event-item
+            a.event-link(href=`/events/${event._id}`)
+              | #{event.eventName}
+              span.event-date  (#{event.date.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: 'numeric'})}) - #{event.location}
+    else
+      p.no-events No events available.
+    a.create-event-btn(href='/create-event') Create Event
