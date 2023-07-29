@@ -3,18 +3,72 @@ extends layout
 block content
   head
     title #{title}
-  body
+    style.
+      form.fm {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+
+      /* Styling for the label.lbls */
+      label.lbl {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      /* Styling for the input.in fields */
+      input.in[type='text'],
+      input.in[type='date'] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+
+      /* Styling for the submit button */
+      input.in[type='submit'] {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* Styling for the cancel link */
+      a.lnk {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        text-decoration: none;
+        color: #4CAF50;
+      }
+
+      /* Styling for the cancel link on hover */
+      a:hover {
+        text-decoration: underline;
+      }
     h1 Edit Event
-    form(action=`/events/${event._id}/edit`, method='POST')
-      input(type='hidden', name='_csrf', value=_csrf)
-      label(for='eventName') Event Name:
-      input(type='text', name='eventName', value=event.name, required)
+    form.fm(action=`/events/${event._id}/edit`, method='POST')
+      input.in(type='hidden', name='_csrf', value=_csrf)
+      label.lbl(for='eventName') Event Name:
+      input.in(type='text', name='eventName', value=event.eventName, required)
       br
-      label(for='date') Date:
-      input(type='date', name='date', value=event.date, required)
+      label.lbl(for='date') Date:
+      - const year = event.date.getFullYear();
+      - const month = String(event.date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      - const day = String(event.date.getDate()).padStart(2, '0');
+      - const eventDate = `${year}-${month}-${day}`;
+      input.in(type='date', name='date', value=eventDate, required)
       br
-      label(for='location') Location:
-      input(type='text', name='location', value=event.location, required)
+      label.lbl(for='location') Location:
+      input.in(type='text', name='location', value=event.location, required)
       br
-      input(type='submit', value='Update Event')
-    a(href=`/events/${event._id}`) Cancel
+      input.in(type='submit', value='Update Event')
+    a.lnk(href=`/events/${event._id}`) Cancel

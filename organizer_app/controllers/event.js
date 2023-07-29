@@ -12,11 +12,11 @@ async function createEvent(req, res) {
   const newEvent = new Event({ eventName, date, location });
   try {
     await newEvent.save();
-    req.flash('success', 'Event created successfully!');
+    req.flash('success', { msg: 'Event created successfully!' });
     return res.redirect('/events');
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Error creating event!');
+    req.flash('errors', { msg: 'Error creating event!' });
     return res.redirect('/events');
   }
 }
@@ -28,7 +28,7 @@ async function getEvents(req, res) {
     return res.render('events', { title: 'Events', events });
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Error fetching events!');
+    req.flash('errors', { msg: 'Error fetching events!' });
     return res.redirect('/events');
   }
 }
@@ -45,7 +45,7 @@ async function getEvent(req, res) {
     });
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Error fetching event!');
+    req.flash('errors', { msg: 'Error fetching event!' });
     return res.redirect('/events');
   }
 }
@@ -57,7 +57,7 @@ async function getEditEvent(req, res) {
     return res.render('edit-event', { title: 'Edit Event', event });
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Error fetching event!');
+    req.flash('errors', { msg: 'Error fetching event!' });
     return res.redirect('/events');
   }
 }
@@ -70,11 +70,11 @@ async function editEvent(req, res) {
     event.date = req.body.date;
     event.location = req.body.location;
     await event.save();
-    req.flash('success', 'Event updated successfully!');
+    req.flash('success', { msg: 'Event updated successfully!' });
     return res.redirect(`/events/${req.params.id}`);
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Error updating event!');
+    req.flash('errors', { msg: 'Error updating event!' });
     return res.redirect(`/events/${req.params.id}`);
   }
 }
@@ -83,11 +83,11 @@ async function editEvent(req, res) {
 async function deleteEvent(req, res) {
   try {
     await Event.findByIdAndDelete(req.params.id);
-    req.flash('success', 'Event deleted successfully!');
+    req.flash('success', { msg: 'Event deleted successfully!' });
     return res.redirect('/events');
   } catch (error) {
     console.log(error);
-    req.flash('error', 'Error deleting event!');
+    req.flash('errors', 'Error deleting event!');
     return res.redirect(`/events/${req.params.id}`);
   }
 }

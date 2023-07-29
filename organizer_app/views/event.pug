@@ -9,7 +9,7 @@ block content
         margin: 20px;
       }
       h2 {
-        color: #007bff;
+        color: #4CAF50;
         margin: 10px;
       }
       p {
@@ -17,10 +17,10 @@ block content
         margin: 10px;
       }
       .p {
-        color: #007bff;
+        color: #4CAF50;
         text-decoration: none;
         margin-right: 10px;
-        border: 1px solid #007bff;
+        border: 1px solid #4CAF50;
         padding: 8px 12px;
         border-radius: 5px;
       }
@@ -33,7 +33,7 @@ block content
         border-radius: 5px;
       }
       .p:hover {
-        background-color: #007bff;
+        background-color: #4CAF50;
         color: #fff;
       }
       .w:hover {
@@ -55,48 +55,34 @@ block content
       input[type="submit"]:hover {
         background-color: #c82333;
       }
-      .at {
-        color: #333;
-        border-bottom: 2px solid #333;
-        padding-bottom: 5px;
-        margin-bottom: 10px;
-        margin-top: 16px;
-      }
-      .atul {
-        list-style-type: disc;
-        margin-left: 20px;
-      }
-      .atil {
-        color: #777;
-        margin-bottom: 5px;
-      }
   .row
     .col
       h1 Event Details
       h2 #{event.name}
-      p Date: #{event.date}
+      p Date: #{event.date.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: 'numeric'})}
       p Location: #{event.location}
       a.p(href='/events') Back to Events
-      a.w(href='/events/#{event._id}/edit') Edit Event
+      a.w(href=`/events/${event._id}/edit`) Edit Event
       form(action=`/events/${event._id}/delete`, method='POST')
         input(type='submit', value='Delete Event')
     .col.text-center
       img(src=`${qrCode}`, alt='QR Code')
-      p Scan the QR code to check in to this event.
+      p
+        b Scan the QR code to check in to this event.
 
   h2 Attendees
   if attendance.length > 0
-    table
-      thead
+    table.table.teble-striped.table-primary.table-hover.table-bordered.table-sm.table-responsive-sm
+      thead.table-dark
         tr
           th Date
           th Student Name
-          th Status
+          th Email
       tbody
-        each entry in attendance
+        each entry in attendance.sort((a, b) => b.timestamp - a.timestamp)
           tr
+            td= entry.timestamp.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: undefined, hour: 'numeric', minute: 'numeric'})
             td= entry.user.profile.name
-            td= entry.email
-            td= entry.timestamp.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: 'numeric'})
+            td= entry.user.email
   else
     p No attendees yet.
