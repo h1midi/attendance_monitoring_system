@@ -21,6 +21,7 @@ class Home extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context, listen: true);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 200, 226, 239),
         appBar: AppBar(
           title: const Text('Attendance'),
           centerTitle: true,
@@ -49,7 +50,7 @@ class Home extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 68),
+              const SizedBox(height: 50),
               Row(
                 children: [
                   Padding(
@@ -113,7 +114,7 @@ class Home extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 60),
               InkWell(
                 highlightColor: Colors.transparent,
                 // splashColor: Colors.transparent,
@@ -125,6 +126,7 @@ class Home extends StatelessWidget {
                     width: 140,
                     height: 140,
                     decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black54, width: 4),
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(100),
                       boxShadow: const [
