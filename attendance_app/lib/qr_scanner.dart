@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import 'user_provider.dart';
+import 'user/user_provider.dart';
 
 class QrScanner extends StatefulWidget {
   const QrScanner({Key? key}) : super(key: key);
@@ -46,6 +46,7 @@ class _QrScannerState extends State<QrScanner> {
     final uid = userProvider.uid;
     String url = '$qrurl/$uid';
     isLoading = true;
+    controller!.pauseCamera();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -69,7 +70,13 @@ class _QrScannerState extends State<QrScanner> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text(response.statusCode == 200 ? 'Registered successfully.' : 'Failed to register'),
+          content: switch (response.statusCode) {
+            200 => const Text('Registered successfully.', style: TextStyle(color: Colors.green)),
+            202 => Text('Already regestered.', style: TextStyle(color: Colors.yellow[700])),
+            204 =>
+              const Text('The event is closed.', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            _ => const Text('Failed to register.', style: TextStyle(color: Colors.red)),
+          },
           actions: [
             TextButton(
               onPressed: () {

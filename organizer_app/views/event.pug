@@ -16,60 +16,22 @@ block content
         color: #555;
         margin: 10px;
       }
-      .p {
-        color: #4CAF50;
-        text-decoration: none;
-        margin-right: 10px;
-        border: 1px solid #4CAF50;
-        padding: 8px 12px;
-        border-radius: 5px;
-      }
-      .w {
-        color: #fad02c;
-        text-decoration: none;
-        margin-right: 10px;
-        border: 1px solid #fad02c;
-        padding: 8px 12px;
-        border-radius: 5px;
-      }
-      .p:hover {
-        background-color: #4CAF50;
-        color: #fff;
-      }
-      .w:hover {
-        background-color: #fad02c;
-        color: #fff;
-      }
-      form {
-        display: inline-block;
-        margin-top: 20px;
-      }
-      input[type="submit"] {
-        background-color: #dc3545;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px;
-      }
-      input[type="submit"]:hover {
-        background-color: #c82333;
-      }
   .row
     .col
       h1 Event Details
-      h2 #{event.name}
+      h2 #{event.eventName}
       p Date: #{event.date.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: 'numeric'})}
       p Location: #{event.location}
-      a.p(href='/events') Back to Events
-      a.w(href=`/events/${event._id}/edit`) Edit Event
-      form(action=`/events/${event._id}/delete`, method='POST')
-        input(type='submit', value='Delete Event')
+      if event.status === 'ongoing'
+        a.btn.btn-outline-dark(href=`/events/${event._id}/close`, style='margin-right:20px;') Close Event
+      else
+        .btn.btn-dark.disabled(style='margin-right:20px;') Event is closed
+      a.btn.btn-outline-warning(href=`/events/${event._id}/edit`, style='margin-right:20px;') Edit Event
+      a.btn.btn-danger(href=`/events/${event._id}/delete`) Delete Event
     .col.text-center
       img(src=`${qrCode}`, alt='QR Code')
       p
         b Scan the QR code to check in to this event.
-
   h2 Attendees
   if attendance.length > 0
     table.table.teble-striped.table-primary.table-hover.table-bordered.table-sm.table-responsive-sm

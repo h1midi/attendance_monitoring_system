@@ -82,12 +82,27 @@ exports.postLogin = (req, res, next) => {
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
-      req.flash('success', { msg: 'Success! You are logged in.' });
-      res.status(302).json({
-        success: true,
-        message: 'Success! You are logged in.',
-        user,
-      });
+      const userAgent = req.headers['user-agent'].toLowerCase();
+
+      // Check if the user agent contains common keywords found in browsers
+      if (
+        userAgent.includes('mozilla')
+        || userAgent.includes('chrome')
+        || userAgent.includes('safari')
+        || userAgent.includes('opera')
+        || userAgent.includes('firefox')
+        || userAgent.includes('edge')
+      ) {
+        req.flash('success', { msg: 'Success! You are logged in.' });
+        res.redirect(req.session.returnTo || '/');
+      } else {
+        // The request is not coming from a browser
+        res.status(302).json({
+          success: true,
+          message: 'Success! You are logged in.',
+          user,
+        });
+      }
     });
   })(req, res, next);
 };

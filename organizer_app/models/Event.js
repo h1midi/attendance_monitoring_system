@@ -14,6 +14,16 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['ongoing', 'completed'],
+    default: 'ongoing',
+  },
   // You can add more fields as per your requirements (e.g., description, organizer, etc.)
 });
 

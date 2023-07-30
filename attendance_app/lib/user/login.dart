@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-import 'home.dart';
+import '../home.dart';
 import 'user_provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -27,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> _login(userProvider) async {
     const String url = 'http://localhost:8080/login';
     final Map<String, String> data = {
-      'email': "dorikatere@mailinator.com",
-      'password': "Pa\$\$w0rd!",
+      'email': _controllerUsername.text,
+      'password': _controllerPassword.text,
     };
     final response = await http.post(Uri.parse(url), body: data);
 
@@ -80,7 +80,10 @@ class _LoginPageState extends State<LoginPage> {
                 onEditingComplete: () => _focusNodePassword.requestFocus(),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter username.";
+                    return "Please enter email.";
+                  }
+                  if (!value.contains('@')) {
+                    return "Please enter valid email.";
                   }
 
                   return null;
@@ -115,6 +118,9 @@ class _LoginPageState extends State<LoginPage> {
                   if (value == null || value.isEmpty) {
                     return "Please enter password.";
                   }
+                  if (value.length < 6) {
+                    return "Password must be at least 6 characters.";
+                  }
 
                   return null;
                 },
@@ -130,22 +136,26 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     onPressed: () {
-                      _login(userProvider).then((value) {
-                        if (value) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Home(),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Login failed'),
-                            ),
-                          );
-                        }
-                      });
+                      if (_formKey.currentState!.validate()) {
+                        _login(userProvider).then(
+                          (value) {
+                            if (value) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Home(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Login failed'),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }
                     },
                     child: const Text("Login"),
                   ),

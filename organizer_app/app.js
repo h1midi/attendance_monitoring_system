@@ -27,7 +27,7 @@ dotenv.config({ path: '.env' });
 // const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const contactController = require('./controllers/contact');
-const homeController = require('./controllers/home');
+// const homeController = require('./controllers/home');
 const eventController = require('./controllers/event');
 const attendanceController = require('./controllers/attendance');
 
@@ -45,6 +45,7 @@ console.log('Run this app using "npm start" to include sass/scss/css builds.');
 /**
  * Connect to MongoDB.
  */
+mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);
@@ -107,7 +108,7 @@ app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawes
 /**
  * Home routes.
  */
-app.get('/', homeController.index);
+// app.get('/', homeController.index);
 /**
  * Auth routes.
  */
@@ -137,18 +138,21 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 /**
  * event routes.
  */
+app.get('/', passportConfig.isAuthenticated, eventController.getEvents);
+app.get('/pass-events', passportConfig.isAuthenticated, eventController.getPassEvents);
 app.get('/create-event', passportConfig.isAuthenticated, eventController.getCreateEvent);
 app.post('/create-event', passportConfig.isAuthenticated, eventController.createEvent);
-app.get('/events', passportConfig.isAuthenticated, eventController.getEvents);
-app.get('/events/:id', passportConfig.isAuthenticated, eventController.generateQRCode, attendanceController.getAttendance, eventController.getEvent);
+app.get('/events/:id', passportConfig.isAuthenticated, eventController.generateQRCode, attendanceController.getEventAttendance, eventController.getEvent);
 app.get('/events/:id/edit', passportConfig.isAuthenticated, eventController.getEditEvent);
 app.post('/events/:id/edit', passportConfig.isAuthenticated, eventController.editEvent);
-app.post('/events/:id/delete', passportConfig.isAuthenticated, eventController.deleteEvent);
+app.get('/events/:id/delete', passportConfig.isAuthenticated, eventController.deleteEvent);
+app.get('/events/:id/close', passportConfig.isAuthenticated, eventController.closeEvent);
 /**
  * attendance routes.
  */
 app.get('/events/:id/add-attendance', passportConfig.isAuthenticated, attendanceController.addAttendance);
 app.get('/events/:id/add-attendance/:uid', attendanceController.addAttendanceMobile);
+app.get('/my-attendance/:id', attendanceController.getAttendanceForUser);
 
 /**
  * Error Handler.

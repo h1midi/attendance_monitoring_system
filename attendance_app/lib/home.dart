@@ -1,8 +1,10 @@
 import 'package:attendance_monitoring_system/qr_scanner.dart';
+import 'package:attendance_monitoring_system/user/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'user_provider.dart';
+import 'attendance/my_attendance.dart';
+import 'user/user_provider.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -29,8 +31,24 @@ class Home extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyAttendance(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.history),
+            ),
+            IconButton(
+              onPressed: () {
                 userProvider.clearUser();
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
               },
               icon: const Icon(Icons.logout),
             ),

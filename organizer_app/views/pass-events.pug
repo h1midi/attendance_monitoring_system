@@ -64,14 +64,13 @@ block content
       color: #999;
     }
   .event-page
-    h1 Upcomming Events
+    h1 Pass Events
     if events.length > 0
       ul.events
-        each event in events.sort((a,b)=> a.date - b.date)
+        each event in events
           li.event-item
             a.event-link(href=`/events/${event._id}`)
               | #{event.eventName}
               span.event-date  (#{event.date.toLocaleDateString(undefined, {day: 'numeric', month: 'short', year: 'numeric'})}) - #{event.location}
     else
       p.no-events No events available.
-    a.create-event-btn(href='/create-event') Create Event
